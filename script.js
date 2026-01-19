@@ -244,7 +244,7 @@ window.resetForm = function() {
 
 window.logout = function() {
     sessionStorage.removeItem('isAdmin');
-    location.reload();
+    window.location.href = "index.html"; // Redirection vers l'accueil
 };
 
 window.previewImage = function(input) {

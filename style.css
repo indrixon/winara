@@ -181,3 +181,82 @@ ul { list-style: none; }
 .btn-buy:active {
     transform: scale(0.95); /* Petit effet de clic */
 }
+/* --- VERSION MOBILE POUR L'ADMIN --- */
+
+@media (max-width: 768px) {
+    
+    /* 1. Ajustement global du conteneur */
+    .admin-container {
+        width: 95%;
+        margin: 20px auto;
+        padding: 15px;
+    }
+
+    /* 2. Formulaire plus large sur mobile */
+    .admin-layout {
+        grid-template-columns: 1fr; /* Empile le formulaire et la liste */
+        gap: 30px;
+    }
+
+    /* 3. TRANSFORMATION DU TABLEAU EN CARTES (Magie !) */
+    table, thead, tbody, th, td, tr {
+        display: block; /* On casse la structure tableau */
+    }
+
+    /* On cache l'en-tête (Image, Nom, Prix...) car inutile en mode carte */
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+
+    tr {
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        padding: 10px;
+    }
+
+    td {
+        border: none;
+        position: relative;
+        padding-left: 0;
+        text-align: left; /* Alignement à gauche */
+        border-bottom: 1px solid #eee;
+        display: flex;
+        align-items: center;
+        justify-content: space-between; /* Espacer le contenu */
+    }
+
+    td:last-child {
+        border-bottom: none;
+        justify-content: flex-start;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    /* Style spécifique pour l'image sur mobile */
+    td img {
+        width: 80px !important; /* Image plus grande */
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    /* Boutons plus gros pour les doigts */
+    .action-btn {
+        padding: 10px 15px;
+        font-size: 1rem;
+        flex: 1; /* Les boutons prennent toute la largeur dispo */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Titres de section plus petits */
+    h2 {
+        font-size: 1.5rem;
+    }
+}
