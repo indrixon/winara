@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Winara - Administration</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div id="login-section" class="login-overlay">
+        <div class="login-box card-admin">
+            <h2>Accès Sécurisé Winara</h2>
+            <div class="form-group">
+                <label>Identifiant</label>
+                <input type="text" id="admin-user" placeholder="ex: admin">
+            </div>
+            <div class="form-group">
+                <label>Mot de passe</label>
+                <input type="password" id="admin-pass" placeholder="ex: 1234">
+            </div>
+            <button onclick="checkLogin()" class="btn-login">Se connecter</button>
+            <p id="login-error" style="color: var(--danger); margin-top: 15px;"></p>
+        </div>
+    </div>
+
+    <div id="dashboard-section" style="display: none;">
+        <nav class="navbar">
+            <div class="logo">WINARA<span>.ADMIN</span></div>
+            <button onclick="logout()" class="btn-cancel" style="flex: inherit; padding: 8px 15px;"><i class="fas fa-sign-out-alt"></i> Déconnexion</button>
+        </nav>
+
+        <div class="container">
+            <div class="admin-layout">
+                
+                <div class="card-admin">
+                    <h3 id="form-title"><i class="fas fa-plus-circle"></i> Ajouter un article</h3>
+                    
+                    <input type="hidden" id="product-id">
+                    <input type="hidden" id="current-image-data">
+
+                    <div class="form-group">
+                        <label>Nom de l'article</label>
+                        <input type="text" id="product-name" placeholder="Ex: Sneakers Urban Flow">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Prix (€)</label>
+                        <input type="number" id="product-price" placeholder="Ex: 149.99" step="0.01">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Image du produit (Max 1Mo conseillé)</label>
+                        <input type="file" id="product-image-upload" accept="image/png, image/jpeg, image/jpg">
+                        <div class="image-preview-container" id="image-preview">
+                            <span>Aucune image sélectionnée</span>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button onclick="saveProduct()" class="btn-save"><i class="fas fa-save"></i> Enregistrer</button>
+                        <button onclick="resetForm()" class="btn-cancel">Annuler</button>
+                    </div>
+                </div>
+
+                <div class="card-admin table-container">
+                    <h3><i class="fas fa-boxes"></i> Inventaire du stock (<span id="total-products">0</span>)</h3>
+                    <table class="product-table">
+                        <thead>
+                            <tr>
+                                <th>Aperçu</th>
+                                <th>Article</th>
+                                <th>Prix</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-product-list">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="script.js"></script>
+    <script>
+        // Vérification de session au chargement
+        document.addEventListener('DOMContentLoaded', () => {
+            loadData();
+            if(sessionStorage.getItem('isAdmin') === 'true'){
+                showDashboard();
+                renderAdminProducts();
+            }
+            
+            // Écouteur pour la prévisualisation de l'image lors de l'upload
+            document.getElementById('product-image-upload').addEventListener('change', function(event) {
+                previewImage(this);
+            });
+        });
+    </script>
+</body>
+</html>
