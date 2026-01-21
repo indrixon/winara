@@ -27,50 +27,64 @@
 
     <div id="dashboard-section" style="display: none;">
         <nav class="navbar">
+<<<<<<< HEAD
+            <div class="logo">WINARA<span>.ADMIN</span></div>
+            <ul class="nav-links">
+                <li><a href="index.html" target="_blank"><i class="fas fa-external-link-alt"></i> Voir le site</a></li>
+                <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Déconnexion</a></li>
+            </ul>
+=======
             <div class="logo">WINAYA<span>.ADMIN</span></div>
             <button onclick="logout()" class="btn-cancel" style="flex: inherit; padding: 8px 15px;"><i class="fas fa-sign-out-alt"></i> Déconnexion</button>
+>>>>>>> c5c1081f7fdb1072b917bc4cc275bc735339b348
         </nav>
 
-        <div class="container">
-            <div class="admin-layout">
+        <div class="container admin-layout">
+            <div class="admin-grid">
                 
                 <div class="card-admin">
                     <h3 id="form-title"><i class="fas fa-plus-circle"></i> Ajouter un article</h3>
-                    
                     <input type="hidden" id="product-id">
                     <input type="hidden" id="current-image-data">
 
                     <div class="form-group">
-                        <label>Nom de l'article</label>
-                        <input type="text" id="product-name" placeholder="Ex: Sneakers Urban Flow">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Prix (fcfa)</label>
-                        <input type="number" id="product-price" placeholder="Ex: 149.99" step="0.01">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Image du produit (Max 1Mo conseillé)</label>
-                        <input type="file" id="product-image-upload" accept="image/png, image/jpeg, image/jpg">
-                        <div class="image-preview-container" id="image-preview">
-                            <span>Aucune image sélectionnée</span>
+                        <label>Image</label>
+                        <div class="file-upload-wrapper">
+                            <input type="file" id="product-image-upload" accept="image/*">
+                            <div id="image-preview" class="image-preview-box">
+                                <span>Aucune image</span>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="form-actions">
-                        <button onclick="saveProduct()" class="btn-save"><i class="fas fa-save"></i> Enregistrer</button>
+                    <div class="form-group">
+                        <label>Nom de l'article</label>
+                        <input type="text" id="product-name" placeholder="ex: Sneakers Urban">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Description (Détails, Tailles...)</label>
+                        <textarea id="product-desc" rows="3" placeholder="Ex: Disponible en 40-44. Cuir véritable."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Prix (FCFA)</label>
+                        <input type="number" id="product-price" placeholder="ex: 15000">
+                    </div>
+
+                    <div class="btn-group">
+                        <button onclick="saveProduct()" class="btn-save">Enregistrer</button>
                         <button onclick="resetForm()" class="btn-cancel">Annuler</button>
                     </div>
                 </div>
 
                 <div class="card-admin table-container">
-                    <h3><i class="fas fa-boxes"></i> Inventaire du stock (<span id="total-products">0</span>)</h3>
+                    <h3><i class="fas fa-boxes"></i> Stock (<span id="total-products">0</span>)</h3>
                     <table class="product-table">
                         <thead>
                             <tr>
-                                <th>Aperçu</th>
-                                <th>Article</th>
+                                <th>Img</th>
+                                <th>Info</th>
                                 <th>Prix</th>
                                 <th>Actions</th>
                             </tr>
@@ -85,21 +99,20 @@
 
     <script type="module" src="script.js"></script>
     <script>
-        // Vérification de session au chargement
         document.addEventListener('DOMContentLoaded', () => {
-            loadData();
-            if(sessionStorage.getItem('isAdmin') === 'true'){
-                showDashboard();
-                renderAdminProducts();
-            }
+            if(window.loadData) window.loadData();
+            if(sessionStorage.getItem('isAdmin') === 'true') window.showDashboard();
             
-            // Écouteur pour la prévisualisation de l'image lors de l'upload
-            document.getElementById('product-image-upload').addEventListener('change', function(event) {
-                previewImage(this);
+            document.getElementById('product-image-upload').addEventListener('change', function() {
+                window.previewImage(this);
             });
         });
     </script>
 </body>
-
 </html>
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> c5c1081f7fdb1072b917bc4cc275bc735339b348
 

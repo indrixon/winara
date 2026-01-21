@@ -1,4 +1,4 @@
-// --- CONFIGURATION FIREBASE ---
+// --- 1. CONFIGURATION FIREBASE ---
 const firebaseConfig = {
     apiKey: "AIzaSyByJgbLgty4OD4_COvqUMzxlypjwXlBf2Q",
     authDomain: "winaria-785b1.firebaseapp.com",
@@ -9,9 +9,11 @@ const firebaseConfig = {
     measurementId: "G-M3922XKNS2"
 };
 
+// Import des fonctions Firebase depuis le CDN
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+// Initialisation
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const productsCol = collection(db, 'products');
@@ -19,91 +21,54 @@ const productsCol = collection(db, 'products');
 let products = [];
 const MY_PHONE_NUMBER = "22890722354"; 
 
-// --- UTILITAIRE : FORMATTER PRIX (FCFA) ---
-// Transforme 10000 en "10 000"
-function formatPrice(price) {
-    return parseInt(price).toLocaleString('fr-FR'); 
-}
+// --- 2. FONCTIONS UTILITAIRES ---
 
-// --- UTILITAIRE : NOTIFICATION TOAST ---
-function showToast(message, type = 'success') {
-    const container = document.getElementById('toast-container') || createToastContainer();
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    toast.innerHTML = type === 'success' ? `<i class="fas fa-check-circle"></i> ${message}` : `<i class="fas fa-exclamation-circle"></i> ${message}`;
-    
-    container.appendChild(toast);
-    
-    // Disparition auto après 3 secondes
-    setTimeout(() => {
-        toast.style.opacity = '0';
-        setTimeout(() => toast.remove(), 300);
-    }, 3000);
-}
+// Formatte le prix (ex: 10000 -> 10 000)
+const formatPrice = (price) => {
+    return parseInt(price).toLocaleString('fr-FR').replace(/\s/g, ' '); 
+};
 
-function createToastContainer() {
-    const div = document.createElement('div');
-    div.id = 'toast-container';
-    document.body.appendChild(div);
-    return div;
-}
-
-// --- CHARGER LES DONNÉES ---
-async function loadData() {
-    // 1. Afficher le Skeleton (chargement)
-    showSkeleton();
-
+// --- 3. CHARGEMENT DES DONNÉES ---
+window.loadData = async function() {
     try {
         const querySnapshot = await getDocs(productsCol);
         products = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         
-        // 2. Remplacer le Skeleton par les vrais produits
-        renderClientProducts();
-        if(sessionStorage.getItem('isAdmin') === 'true') renderAdminProducts();
+        // On vérifie sur quelle page on est pour lancer le bon affichage
+        if(document.getElementById('product-grid')) renderClientProducts();
+        if(document.getElementById('admin-product-list')) renderAdminProducts();
         
+        // Mise à jour du compteur dans l'admin
         const totalSpan = document.getElementById('total-products');
         if(totalSpan) totalSpan.innerText = products.length;
 
     } catch (error) {
-        console.error("Erreur Firebase:", error);
-        showToast("Erreur de connexion", "error");
+        console.error("Erreur chargement Firebase:", error);
     }
-}
+};
 
-// Affiche des fausses cartes pendant le chargement
-function showSkeleton() {
-    const grid = document.getElementById('product-grid');
-    if (!grid) return;
-    // On génère 4 fausses cartes
-    grid.innerHTML = Array(4).fill(`
-        <div class="skeleton-card">
-            <div class="skeleton skeleton-img"></div>
-            <div class="skeleton skeleton-text"></div>
-            <div class="skeleton skeleton-price"></div>
-        </div>
-    `).join('');
-}
-
-// --- RENDU CLIENT (Avec FCFA) ---
+// --- 4. AFFICHAGE CLIENT (ACCUEIL) ---
 function renderClientProducts() {
     const grid = document.getElementById('product-grid');
     if (!grid) return;
 
     if(products.length === 0) {
-        grid.innerHTML = "<p>Aucun article disponible pour le moment.</p>";
+        grid.innerHTML = "<p style='grid-column: 1/-1; text-align:center; color:#888;'>Aucun article disponible pour le moment.</p>";
         return;
     }
 
     grid.innerHTML = products.map(p => `
         <div class="product-card">
-            <div class="card-image-container">
+            <div class="card-img-box">
                 <img src="${p.imgData}" alt="${p.name}" loading="lazy">
             </div>
-            <div class="p-info">
-                <span class="p-category">Nouveauté</span>
-                <h3>${p.name}</h3>
+            <div class="card-info">
+                <div>
+                    <h3>${p.name}</h3>
+                    <p class="p-desc">${p.description || ""}</p>
+                </div>
                 <div class="p-footer">
-                    <span class="p-price">${formatPrice(p.price)} FCFA</span>
+                    <span class="p-price">${formatPrice(p.price)} F</span>
                     <button class="btn-buy" onclick="openWhatsApp('${p.id}')">
                         <i class="fab fa-whatsapp"></i> Acheter
                     </button>
@@ -113,152 +78,179 @@ function renderClientProducts() {
     `).join('');
 }
 
-// --- RENDU ADMIN (Avec FCFA) ---
+// --- 5. FONCTION WHATSAPP ---
+window.openWhatsApp = function(id) {
+    const p = products.find(x => x.id === id);
+    if(p) {
+        // On ajoute la description au message si elle existe
+        const details = p.description ? `\n📝 Détails: ${p.description}` : "";
+        const msg = `Salut Winara ! 👋\nJe suis intéressé par cet article :\n📦 *${p.name}*${details}\n💰 Prix: ${formatPrice(p.price)} FCFA\n\nEst-il disponible ?`;
+        
+        // Ouverture de WhatsApp
+        window.open(`https://wa.me/${MY_PHONE_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+};
+
+// --- 6. GESTION CONNEXION ADMIN ---
+window.checkLogin = function() {
+    const u = document.getElementById('admin-user').value;
+    const p = document.getElementById('admin-pass').value;
+    
+    if(u === "admin" && p === "1234") {
+        sessionStorage.setItem('isAdmin', 'true');
+        window.showDashboard();
+    } else {
+        document.getElementById('login-error').innerText = "Identifiants incorrects.";
+    }
+};
+
+window.showDashboard = function() {
+    document.getElementById('login-section').style.display = 'none';
+    document.getElementById('dashboard-section').style.display = 'block';
+};
+
+window.logout = function() {
+    sessionStorage.removeItem('isAdmin');
+    window.location.href = "index.html"; 
+};
+
+// --- 7. GESTION DES PRODUITS (CRUD) ---
+
+// SAUVEGARDER (Ajout ou Modification)
+window.saveProduct = async function() {
+    const id = document.getElementById('product-id').value;
+    const name = document.getElementById('product-name').value;
+    const desc = document.getElementById('product-desc').value; // On récupère la description
+    const price = document.getElementById('product-price').value;
+    const fileInput = document.getElementById('product-image-upload');
+    const currentImg = document.getElementById('current-image-data').value;
+
+    if (!name || !price) {
+        alert("Merci de remplir le nom et le prix.");
+        return;
+    }
+
+    const btn = document.querySelector('.btn-save');
+    const originalBtnText = btn.innerText;
+    btn.innerText = "Enregistrement...";
+    btn.disabled = true;
+
+    try {
+        let imgData = currentImg;
+
+        // Si une nouvelle image est choisie
+        if (fileInput.files.length > 0) {
+            imgData = await new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onload = (e) => resolve(e.target.result);
+                reader.readAsDataURL(fileInput.files[0]);
+            });
+        } else if (!currentImg) {
+            alert("Une image est obligatoire.");
+            btn.innerText = originalBtnText;
+            btn.disabled = false;
+            return;
+        }
+
+        const data = { 
+            name: name, 
+            price: price, 
+            description: desc, // On sauvegarde la description
+            imgData: imgData 
+        };
+
+        if (id) {
+            // Mise à jour
+            await updateDoc(doc(db, 'products', id), data);
+        } else {
+            // Création
+            await addDoc(productsCol, data);
+        }
+
+        resetForm();
+        loadData(); // Rechargement de la liste
+        
+    } catch (e) {
+        console.error("Erreur save:", e);
+        alert("Erreur lors de l'enregistrement. Vérifiez la console.");
+    } finally {
+        btn.innerText = originalBtnText;
+        btn.disabled = false;
+    }
+};
+
+// AFFICHER LA LISTE DANS L'ADMIN
 function renderAdminProducts() {
-    const tbody = document.getElementById('admin-product-list');
-    if (!tbody) return;
-    tbody.innerHTML = products.map(p => `
+    const list = document.getElementById('admin-product-list');
+    if(!list) return;
+
+    list.innerHTML = products.map(p => `
         <tr>
-            <td><img src="${p.imgData}" style="width:50px; border-radius:5px;"></td>
-            <td><strong>${p.name}</strong></td>
-            <td>${formatPrice(p.price)} FCFA</td>
+            <td><img src="${p.imgData}" class="thumb-img"></td>
             <td>
-                <button class="action-btn edit-btn" onclick="editProduct('${p.id}')">Modifier</button>
-                <button class="action-btn delete-btn" onclick="deleteProduct('${p.id}')">Suppr.</button>
+                <strong>${p.name}</strong><br>
+                <small style="color:#666; font-style:italic;">
+                    ${(p.description || "").substring(0, 25)}${(p.description && p.description.length > 25) ? "..." : ""}
+                </small>
+            </td>
+            <td>${formatPrice(p.price)}</td>
+            <td>
+                <button class="action-btn btn-edit" onclick="editProduct('${p.id}')"><i class="fas fa-edit"></i></button>
+                <button class="action-btn btn-delete" onclick="deleteProduct('${p.id}')"><i class="fas fa-trash-alt"></i></button>
             </td>
         </tr>
     `).join('');
 }
 
-// --- FONCTION WHATSAPP ---
-window.openWhatsApp = function(id) {
-    const product = products.find(p => p.id === id);
-    if (product) {
-        // Message en français avec prix en FCFA
-        const message = `Bonjour Winara ! 👋%0A%0ACet article est-il disponible ?%0A%0A📦 *Article :* ${product.name}%0A💰 *Prix :* ${formatPrice(product.price)} FCFA`;
-        window.open(`https://wa.me/${MY_PHONE_NUMBER}?text=${message}`, '_blank');
-    }
-};
-
-// --- LOGIQUE ADMIN (inchangée mais sécurisée) ---
-window.checkLogin = function() {
-    const user = document.getElementById('admin-user').value;
-    const pass = document.getElementById('admin-pass').value;
-    if (user === "admin" && pass === "1234") {
-        sessionStorage.setItem('isAdmin', 'true');
-        showDashboard();
-        showToast("Connexion réussie !", "success");
-    } else {
-        document.getElementById('login-error').innerText = "Identifiants incorrects.";
-        showToast("Erreur d'identifiants", "error");
-    }
-};
-
-function showDashboard() {
-    const loginSec = document.getElementById('login-section');
-    const dashSec = document.getElementById('dashboard-section');
-    if(loginSec) loginSec.style.display = 'none';
-    if(dashSec) dashSec.style.display = 'block';
-    renderAdminProducts();
-}
-
-window.saveProduct = async function() {
-    const id = document.getElementById('product-id').value;
-    const name = document.getElementById('product-name').value;
-    const price = document.getElementById('product-price').value;
-    const fileInput = document.getElementById('product-image-upload');
-    const currentImageData = document.getElementById('current-image-data').value;
-
-    if (!name || !price) return showToast("Remplis le nom et le prix", "error");
-
-    showToast("Enregistrement en cours...", "success");
-
-    let imgDataToSave = currentImageData;
-    
-    if (fileInput.files.length > 0) {
-        const file = fileInput.files[0];
-        const reader = new FileReader();
-        reader.onload = async (e) => {
-            processSave(id, name, price, e.target.result);
-        };
-        reader.readAsDataURL(file);
-    } else if (currentImageData) {
-        processSave(id, name, price, currentImageData);
-    } else {
-        showToast("Image manquante", "error");
-    }
-};
-
-async function processSave(id, name, price, imgData) {
-    const productData = { name, price, imgData };
-    try {
-        if (id) {
-            const productRef = doc(db, 'products', id);
-            await updateDoc(productRef, productData);
-        } else {
-            await addDoc(productsCol, productData);
-        }
-        await loadData();
-        resetForm();
-        showToast("Article enregistré !", "success");
-    } catch (error) {
-        console.error(error);
-        showToast("Erreur lors de l'enregistrement", "error");
-    }
-}
-
-window.deleteProduct = async function(id) {
-    if(confirm("Confirmer la suppression ?")) {
-        try {
-            await deleteDoc(doc(db, 'products', id));
-            await loadData();
-            showToast("Article supprimé", "success");
-        } catch (error) {
-            console.error(error);
-            showToast("Erreur de suppression", "error");
-        }
-    }
-};
-
+// PRÉPARER LA MODIFICATION
 window.editProduct = function(id) {
-    const product = products.find(p => p.id === id);
-    document.getElementById('product-id').value = product.id;
-    document.getElementById('product-name').value = product.name;
-    document.getElementById('product-price').value = product.price;
-    document.getElementById('current-image-data').value = product.imgData;
-    document.getElementById('image-preview').innerHTML = `<img src="${product.imgData}">`;
+    const p = products.find(x => x.id === id);
+    if(!p) return;
+
+    document.getElementById('product-id').value = p.id;
+    document.getElementById('product-name').value = p.name;
+    document.getElementById('product-desc').value = p.description || ""; // On remet la description
+    document.getElementById('product-price').value = p.price;
+    document.getElementById('current-image-data').value = p.imgData;
+    document.getElementById('image-preview').innerHTML = `<img src="${p.imgData}">`;
     document.getElementById('form-title').innerText = "Modifier l'article";
     
-    // Scroll vers le formulaire
+    // Remonter en haut de page pour voir le formulaire
     document.querySelector('.admin-layout').scrollIntoView({ behavior: 'smooth' });
 };
 
+// SUPPRIMER UN ARTICLE
+window.deleteProduct = async function(id) {
+    if(confirm("Voulez-vous vraiment supprimer cet article ?")) {
+        try {
+            await deleteDoc(doc(db, "products", id));
+            loadData();
+        } catch(e) {
+            console.error(e);
+            alert("Erreur de suppression");
+        }
+    }
+};
+
+// VIDER LE FORMULAIRE
 window.resetForm = function() {
     document.getElementById('product-id').value = "";
     document.getElementById('product-name').value = "";
+    document.getElementById('product-desc').value = "";
     document.getElementById('product-price').value = "";
     document.getElementById('product-image-upload').value = "";
     document.getElementById('current-image-data').value = "";
     document.getElementById('image-preview').innerHTML = '<span>Aucune image</span>';
+    document.getElementById('form-title').innerHTML = '<i class="fas fa-plus-circle"></i> Ajouter un article';
 };
 
-window.logout = function() {
-    sessionStorage.removeItem('isAdmin');
-    window.location.href = "index.html"; // Redirection vers l'accueil
-};
-
+// PRÉVISUALISATION IMAGE LORS DE L'UPLOAD
 window.previewImage = function(input) {
-    const previewContainer = document.getElementById('image-preview');
-    const file = input.files[0];
-    if (file) {
+    if (input.files && input.files[0]) {
         const reader = new FileReader();
         reader.onload = (e) => {
-            previewContainer.innerHTML = `<img src="${e.target.result}" alt="Aperçu">`;
+            document.getElementById('image-preview').innerHTML = `<img src="${e.target.result}">`;
         };
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(input.files[0]);
     }
 };
-
-// Init
-loadData();
-if(sessionStorage.getItem('isAdmin') === 'true') showDashboard();

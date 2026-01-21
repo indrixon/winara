@@ -1,15 +1,15 @@
-/* --- FONT & RESET --- */
+/* --- 1. POLICES & RESET --- */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
 
 :root {
-    --primary: #1a2a3a;   /* Bleu nuit profond */
-    --accent: #00cba9;    /* Vert émeraude moderne */
+    --primary: #1a2a3a;   /* Bleu nuit */
+    --accent: #00cba9;    /* Vert émeraude */
     --accent-hover: #00a88d;
     --danger: #ff4757;
     --bg-light: #f3f4f6;
     --text-dark: #2d3748;
     --text-gray: #718096;
-    --card-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+    --card-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
@@ -17,246 +17,171 @@ body { background-color: var(--bg-light); color: var(--text-dark); line-height: 
 a { text-decoration: none; }
 ul { list-style: none; }
 
-/* --- NAVBAR --- */
-.navbar { background: white; height: 70px; display: flex; justify-content: space-between; align-items: center; padding: 0 5%; box-shadow: 0 2px 4px rgba(0,0,0,0.08); position: sticky; top:0; z-index: 100; }
-.logo { font-weight: 900; font-size: 1.5rem; color: var(--primary); letter-spacing: -1px; }
+/* --- 2. BARRE DE NAVIGATION --- */
+.navbar { 
+    background: white; 
+    height: 70px; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    padding: 0 5%; 
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05); 
+    position: sticky; 
+    top: 0; 
+    z-index: 100; 
+}
+.logo { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
 .logo span { color: var(--accent); }
-.nav-links { display: flex; gap: 30px; }
-.nav-links a { color: var(--text-dark); font-weight: 500; transition: 0.3s; font-size: 0.95rem; }
-.nav-links a:hover, .nav-links a.active { color: var(--accent); }
-.btn-admin-link { background: var(--primary); color: white !important; padding: 8px 20px; border-radius: 6px; }
-.btn-admin-link:hover { opacity: 0.9; }
+.nav-links { display: flex; gap: 20px; }
+.nav-links a { color: var(--text-dark); font-weight: 500; }
+.btn-admin-link { background: var(--bg-light); padding: 8px 15px; border-radius: 20px; font-size: 0.9rem; }
 
-/* --- HERO SECTION (Index) --- */
-.hero {
-    background: linear-gradient(135deg, var(--primary) 0%, #2c3e50 100%);
-    color: white;
-    text-align: center;
-    padding: 80px 20px;
-    margin-bottom: 40px;
+/* --- 3. SECTION HÉROS (Bannière) --- */
+.hero { 
+    text-align: center; 
+    padding: 60px 20px; 
+    background: linear-gradient(135deg, #1a2a3a 0%, #2d3748 100%); 
+    color: white; 
+    margin-bottom: 30px; 
 }
-.hero h1 { font-size: 3rem; margin-bottom: 15px; font-weight: 800; }
-.hero p { font-size: 1.2rem; opacity: 0.9; max-width: 600px; margin: 0 auto; }
+.hero h1 { font-size: 2.2rem; margin-bottom: 10px; }
+.hero p { opacity: 0.8; max-width: 600px; margin: 0 auto; font-size: 1rem; }
 
-/* --- CONTAINER & GRID --- */
+/* --- 4. GRILLE PRODUITS (CLIENT) --- */
 .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 50px; }
-.section-title { font-size: 1.8rem; color: var(--primary); margin-bottom: 30px; font-weight: 700; position: relative; }
-.product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
+.section-title { 
+    text-align: center; 
+    margin-bottom: 30px; 
+    color: var(--primary); 
+    font-weight: 700; 
+    font-size: 1.5rem; 
+}
 
-/* --- PRODUCT CARD (Client) --- */
-.product-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: var(--card-shadow); transition: transform 0.3s ease, box-shadow 0.3s ease; border: 1px solid #eee; }
-.product-card:hover { transform: translateY(-7px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04); }
-.card-image-container { height: 220px; overflow: hidden; background: #f8f8f8; display: flex; align-items: center; justify-content: center;}
-.product-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
-.product-card:hover img { transform: scale(1.05); }
-.p-info { padding: 20px; }
-.p-category { font-size: 0.8rem; color: var(--accent); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
-.p-info h3 { font-size: 1.1rem; margin: 5px 0 10px; color: var(--primary); }
-.p-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
-.p-price { font-weight: 800; font-size: 1.4rem; color: var(--text-dark); }
-.btn-buy { background: var(--accent); color: white; border: none; padding: 10px 18px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.2s; }
-.btn-buy:hover { background: var(--accent-hover); }
+.product-grid { 
+    display: grid; 
+    /* Version PC : Colonnes automatiques */
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+    gap: 25px; 
+}
 
-/* --- ADMIN LOGIN --- */
-.login-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--primary); display: flex; justify-content: center; align-items: center; z-index: 200; }
-.login-box { background: white; padding: 40px; border-radius: 12px; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
-.login-box h2 { color: var(--primary); margin-bottom: 25px; }
+.product-card { 
+    background: white; 
+    border-radius: 12px; 
+    overflow: hidden; 
+    box-shadow: var(--card-shadow); 
+    transition: transform 0.3s ease; 
+    display: flex; 
+    flex-direction: column; 
+}
+.product-card:hover { transform: translateY(-5px); }
 
-/* --- ADMIN DASHBOARD --- */
-.admin-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 30px; margin-top: 30px; }
-.card-admin { background: white; padding: 30px; border-radius: 12px; box-shadow: var(--card-shadow); }
-.card-admin h3 { color: var(--primary); margin-bottom: 20px; border-bottom: 2px solid var(--bg-light); padding-bottom: 15px; }
+.card-img-box { 
+    height: 220px; 
+    background: #f8fafc; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    overflow: hidden; 
+}
+.card-img-box img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+.product-card:hover .card-img-box img { transform: scale(1.05); }
 
-/* --- FORMS --- */
-.form-group { margin-bottom: 20px; }
-.form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-dark); font-size: 0.9rem; }
-.form-group input, .form-group select { width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; transition: 0.3s; outline: none; }
-.form-group input:focus { border-color: var(--accent); }
-.form-actions { display: flex; gap: 10px; }
-.btn-save, .btn-login { flex: 2; background: var(--accent); color: white; padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 1rem; transition: 0.2s;}
-.btn-save:hover, .btn-login:hover { background: var(--accent-hover); }
-.btn-cancel { flex: 1; background: transparent; color: var(--text-gray); border: 2px solid #e2e8f0; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: 600; transition: 0.2s;}
-.btn-cancel:hover { border-color: var(--text-gray); background: #f7fafc; }
+.card-info { 
+    padding: 15px; 
+    flex-grow: 1; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: space-between; 
+}
+.card-info h3 { font-size: 1rem; margin-bottom: 5px; color: var(--primary); line-height: 1.3; }
 
-/* --- IMAGE UPLOAD PREVIEW --- */
-.image-preview-container { width: 100%; height: 200px; background: #f8fafc; border: 2px dashed #e2e8f0; border-radius: 8px; display: flex; justify-content: center; align-items: center; overflow: hidden; margin-top: 10px; color: #a0aec0; }
-.image-preview-container img { width: 100%; height: 100%; object-fit: contain; }
+/* Style de la description */
+.p-desc {
+    font-size: 0.8rem;
+    color: var(--text-gray);
+    margin-bottom: 10px;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Coupe après 2 lignes */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
 
-/* --- TABLE ADMIN --- */
+.p-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
+.p-price { font-weight: 700; color: var(--primary); font-size: 1rem; }
+.btn-buy { 
+    background: var(--accent); 
+    color: white; 
+    border: none; 
+    padding: 8px 12px; 
+    border-radius: 6px; 
+    cursor: pointer; 
+    display: flex; 
+    align-items: center; 
+    gap: 5px; 
+    font-size: 0.9rem; 
+    font-weight: 600; 
+}
+
+/* --- 5. PAGE ADMIN --- */
+.login-overlay { 
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+    background: #f3f4f6; display: flex; justify-content: center; align-items: center; z-index: 1000; 
+}
+.card-admin { background: white; padding: 25px; border-radius: 12px; box-shadow: var(--card-shadow); }
+.login-box { width: 90%; max-width: 400px; text-align: center; }
+
+.admin-layout { margin-top: 20px; }
+.admin-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 30px; align-items: start; }
+
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 0.85rem; }
+.form-group input, .form-group textarea { 
+    width: 100%; padding: 10px; border: 1px solid #cbd5e0; border-radius: 6px; font-family: inherit; 
+}
+.file-upload-wrapper { 
+    border: 2px dashed #cbd5e0; padding: 15px; text-align: center; border-radius: 6px; cursor: pointer; 
+}
+.image-preview-box { 
+    margin-top: 10px; height: 120px; display: flex; justify-content: center; align-items: center; background: #f8fafc; 
+}
+.image-preview-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+.btn-group { display: flex; gap: 10px; margin-top: 15px; }
+.btn-save { flex: 1; background: var(--primary); color: white; padding: 10px; border: none; border-radius: 6px; cursor: pointer; }
+.btn-cancel { flex: 1; border: 1px solid #cbd5e0; background: transparent; padding: 10px; border-radius: 6px; cursor: pointer; }
+
+/* Tableau Admin */
 .table-container { overflow-x: auto; }
-.product-table { width: 100%; border-collapse: separate; border-spacing: 0 10px; }
-.product-table th { text-align: left; padding: 15px; color: var(--text-gray); font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
-.product-table td { background: #f8fafc; padding: 15px; vertical-align: middle; }
-.product-table tr td:first-child { border-top-left-radius: 8px; border-bottom-left-radius: 8px; }
-.product-table tr td:last-child { border-top-right-radius: 8px; border-bottom-right-radius: 8px; }
-.product-table img { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 1px solid #eee; }
-.action-btn { padding: 8px 12px; border: none; cursor: pointer; color: white; border-radius: 6px; font-size: 0.8rem; font-weight: 600; margin-right: 5px; transition: 0.2s; }
-.edit-btn { background: #f6ad55; color: white; } /* Orange */
-.edit-btn:hover { background: #ed8936; }
-.delete-btn { background: var(--danger); color: white; }
-.delete-btn:hover { background: #d32f2f; }
-/* Bouton WhatsApp Spécial */
-.btn-buy {
-    background: #25D366; /* Vert WhatsApp Officiel */
-    display: flex;
-    align-items: center;
-    gap: 8px; /* Espace entre icône et texte */
-}
-.btn-buy:hover {
-    background: #128C7E; /* Vert plus foncé au survol */
-}
-/* --- AMÉLIORATION UX & FCFA --- */
+.product-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+.product-table th { text-align: left; padding: 12px; background: #f8fafc; font-size: 0.85rem; }
+.product-table td { padding: 12px; border-bottom: 1px solid #edf2f7; vertical-align: middle; font-size: 0.9rem; }
+.thumb-img { width: 50px; height: 50px; object-fit: cover; border-radius: 4px; }
+.action-btn { background: none; border: none; cursor: pointer; font-size: 1rem; margin: 0 5px; }
+.btn-edit { color: #3182ce; } .btn-delete { color: var(--danger); }
 
-/* 1. Formatage du prix plus visible */
-.p-price {
-    font-size: 1.3rem;
-    color: var(--primary);
-    font-weight: 800;
-    letter-spacing: -0.5px;
-}
-
-/* 2. Animation de chargement (Skeleton) */
-.skeleton {
-    background: #eee;
-    background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%);
-    border-radius: 5px;
-    background-size: 200% 100%;
-    animation: 1.5s shine linear infinite;
-}
-.skeleton-card {
-    background: white;
-    border-radius: 12px;
-    padding: 15px;
-    box-shadow: var(--card-shadow);
-    height: 350px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-.skeleton-img { width: 100%; height: 200px; border-radius: 8px; }
-.skeleton-text { width: 70%; height: 20px; }
-.skeleton-price { width: 40%; height: 30px; }
-
-@keyframes shine {
-    to { background-position-x: -200%; }
-}
-
-/* 3. Notification Toast (Au lieu des alertes) */
-#toast-container {
-    position: fixed;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-.toast {
-    background: var(--primary);
-    color: white;
-    padding: 12px 24px;
-    border-radius: 50px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-    font-weight: 500;
-    font-size: 0.9rem;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: slideUp 0.3s forwards;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-.toast.success { background: var(--accent); }
-.toast.error { background: var(--danger); }
-
-@keyframes slideUp {
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* 4. Amélioration boutons */
-.btn-buy {
-    transition: transform 0.2s, background 0.2s;
-}
-.btn-buy:active {
-    transform: scale(0.95); /* Petit effet de clic */
-}
-/* --- VERSION MOBILE POUR L'ADMIN --- */
-
+/* --- 6. MOBILE RESPONSIVE (ANDROID/IOS) --- */
 @media (max-width: 768px) {
+    /* FORCE 2 COLONNES CÔTE À CÔTE */
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 12px; 
+    }
+
+    /* Ajustements visuels pour mobile */
+    .container { padding: 0 12px 40px; }
+    .card-img-box { height: 160px; }
+    .card-info { padding: 10px; }
+    .p-price { font-size: 0.9rem; }
     
-    /* 1. Ajustement global du conteneur */
-    .admin-container {
-        width: 95%;
-        margin: 20px auto;
-        padding: 15px;
-    }
-
-    /* 2. Formulaire plus large sur mobile */
-    .admin-layout {
-        grid-template-columns: 1fr; /* Empile le formulaire et la liste */
-        gap: 30px;
-    }
-
-    /* 3. TRANSFORMATION DU TABLEAU EN CARTES (Magie !) */
-    table, thead, tbody, th, td, tr {
-        display: block; /* On casse la structure tableau */
-    }
-
-    /* On cache l'en-tête (Image, Nom, Prix...) car inutile en mode carte */
-    thead tr {
-        position: absolute;
-        top: -9999px;
-        left: -9999px;
-    }
-
-    tr {
-        background: white;
-        border: 1px solid #ddd;
-        border-radius: 10px;
-        margin-bottom: 15px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        padding: 10px;
-    }
-
-    td {
-        border: none;
-        position: relative;
-        padding-left: 0;
-        text-align: left; /* Alignement à gauche */
-        border-bottom: 1px solid #eee;
-        display: flex;
-        align-items: center;
-        justify-content: space-between; /* Espacer le contenu */
-    }
-
-    td:last-child {
-        border-bottom: none;
-        justify-content: flex-start;
-        gap: 10px;
-        margin-top: 10px;
-    }
-
-    /* Style spécifique pour l'image sur mobile */
-    td img {
-        width: 80px !important; /* Image plus grande */
-        height: 80px;
-        object-fit: cover;
-        border-radius: 8px;
-    }
-
-    /* Boutons plus gros pour les doigts */
-    .action-btn {
-        padding: 10px 15px;
-        font-size: 1rem;
-        flex: 1; /* Les boutons prennent toute la largeur dispo */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    /* Titres de section plus petits */
-    h2 {
-        font-size: 1.5rem;
-    }
+    /* Bouton acheter plus compact */
+    .btn-buy { padding: 6px 10px; font-size: 0.8rem; }
+    .btn-buy i { display: none; } /* Cache l'icône WhatsApp pour gagner de la place */
+    
+    /* Admin sur Mobile */
+    .admin-grid { grid-template-columns: 1fr; }
+    .product-table thead { display: none; }
+    .product-table tr { display: block; border: 1px solid #ddd; margin-bottom: 10px; border-radius: 8px; padding: 10px; }
+    .product-table td { display: flex; justify-content: space-between; border: none; padding: 5px 0; border-bottom: 1px solid #eee; }
+    .product-table td:last-child { border-bottom: none; }
 }
