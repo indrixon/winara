@@ -185,3 +185,38 @@ ul { list-style: none; }
     .product-table td { display: flex; justify-content: space-between; border: none; padding: 5px 0; border-bottom: 1px solid #eee; }
     .product-table td:last-child { border-bottom: none; }
 }
+/* --- GARDER VOTRE DEBUT DE FICHIER (Roots, Navbar, Hero) --- */
+/* ... (copiez vos styles actuels jusqu'à .product-grid) ... */
+
+.product-grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+    gap: 25px; 
+}
+
+/* NOUVEAU STYLE DESCRIPTION */
+.p-description {
+    font-size: 0.85rem;
+    color: var(--text-gray);
+    margin: 5px 0 10px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* --- LE CORRECTIF POUR MOBILE (2 COLONNES) --- */
+@media (max-width: 768px) {
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr) !important; /* Force 2 colonnes */
+        gap: 10px;
+        padding: 5px;
+    }
+
+    .p-info { padding: 10px; }
+    .p-price { font-size: 1rem; }
+    .btn-buy { padding: 8px; font-size: 0.8rem; }
+    .card-image-container { height: 160px; } /* Image un peu plus petite sur mobile */
+}
+
+/* Gardez vos autres styles @media pour l'admin plus bas */

@@ -27,20 +27,12 @@
 
     <div id="dashboard-section" style="display: none;">
         <nav class="navbar">
-<<<<<<< HEAD
-            <div class="logo">WINARA<span>.ADMIN</span></div>
-            <ul class="nav-links">
-                <li><a href="index.html" target="_blank"><i class="fas fa-external-link-alt"></i> Voir le site</a></li>
-                <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Déconnexion</a></li>
-            </ul>
-=======
             <div class="logo">WINAYA<span>.ADMIN</span></div>
             <button onclick="logout()" class="btn-cancel" style="flex: inherit; padding: 8px 15px;"><i class="fas fa-sign-out-alt"></i> Déconnexion</button>
->>>>>>> c5c1081f7fdb1072b917bc4cc275bc735339b348
         </nav>
 
-        <div class="container admin-layout">
-            <div class="admin-grid">
+        <div class="container">
+            <div class="admin-layout">
                 
                 <div class="card-admin">
                     <h3 id="form-title"><i class="fas fa-plus-circle"></i> Ajouter un article</h3>
@@ -48,49 +40,46 @@
                     <input type="hidden" id="current-image-data">
 
                     <div class="form-group">
-                        <label>Image</label>
-                        <div class="file-upload-wrapper">
-                            <input type="file" id="product-image-upload" accept="image/*">
-                            <div id="image-preview" class="image-preview-box">
-                                <span>Aucune image</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
                         <label>Nom de l'article</label>
-                        <input type="text" id="product-name" placeholder="ex: Sneakers Urban">
+                        <input type="text" id="product-name" placeholder="Ex: Sneakers Urban Flow">
                     </div>
 
                     <div class="form-group">
-                        <label>Description (Détails, Tailles...)</label>
-                        <textarea id="product-desc" rows="3" placeholder="Ex: Disponible en 40-44. Cuir véritable."></textarea>
+                        <label>Description (Tailles, détails...)</label>
+                        <textarea id="product-desc" rows="3" placeholder="Ex: Disponible en S, M, L. Tissu coton."></textarea>
                     </div>
 
                     <div class="form-group">
                         <label>Prix (FCFA)</label>
-                        <input type="number" id="product-price" placeholder="ex: 15000">
+                        <input type="number" id="product-price" placeholder="Ex: 15000">
                     </div>
 
-                    <div class="btn-group">
-                        <button onclick="saveProduct()" class="btn-save">Enregistrer</button>
+                    <div class="form-group">
+                        <label>Image du produit</label>
+                        <input type="file" id="product-image-upload" accept="image/*">
+                        <div class="image-preview-container" id="image-preview">
+                            <span>Aucune image sélectionnée</span>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button onclick="saveProduct()" class="btn-save"><i class="fas fa-save"></i> Enregistrer</button>
                         <button onclick="resetForm()" class="btn-cancel">Annuler</button>
                     </div>
                 </div>
 
                 <div class="card-admin table-container">
-                    <h3><i class="fas fa-boxes"></i> Stock (<span id="total-products">0</span>)</h3>
+                    <h3><i class="fas fa-boxes"></i> Inventaire (<span id="total-products">0</span>)</h3>
                     <table class="product-table">
                         <thead>
                             <tr>
-                                <th>Img</th>
-                                <th>Info</th>
+                                <th>Aperçu</th>
+                                <th>Article</th>
                                 <th>Prix</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody id="admin-product-list">
-                            </tbody>
+                        <tbody id="admin-product-list"></tbody>
                     </table>
                 </div>
             </div>
@@ -110,9 +99,3 @@
     </script>
 </body>
 </html>
-<<<<<<< HEAD
-=======
-
-
->>>>>>> c5c1081f7fdb1072b917bc4cc275bc735339b348
-
